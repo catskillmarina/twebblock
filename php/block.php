@@ -62,13 +62,6 @@ foreach ($acl_urls as &$acl)
     $replacements[1] = '/';
     $temparraymod = preg_replace($patterns, $replacements, $temparray);
 
-#   echo "<h1>BEFORE temparraymod PRINT</h1>\n";
-#   $i = 0;
-#   foreach($temparraymod as &$foo)
-#   {
-#       echo "<font color =\"00ff00\">$i: $foo</font><br>\n";
-#       $i++;
-#   }
     $badrefarray = array_merge($badreferrers, $temparraymod);
 }
 
