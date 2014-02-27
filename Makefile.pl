@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 
+# CHANGE this code to use curl to get ACL data #
 
 open(ACL,"<ACL");
 @BR= <ACL>;
@@ -78,3 +79,39 @@ print(JS '}');
 print(JS "\n");
 
 close(JS);
+
+
+
+
+
+############################################################################
+#                       Create the PHP blocker config                      #
+############################################################################
+
+#-------------------------------------------------------#
+#          Backup Old php blocker config                #
+#-------------------------------------------------------#
+open(PHP,"<php/config.php");
+@PHP = <PHP>;
+close(PHP);
+open(PHPBAK,">php/config.php.BAK");
+print(PHPBAK @JS);
+close(PHPBAK);
+
+$acl = "file:///home/marina/public_html/twebblock/ACL";
+$cookie_domain = "http://e271.net";
+
+open(PHP,">php/config.php");
+
+print PHP << 'EOF';
+<?php
+    $acl_urls = array(
+EOF
+print(PHP "        \"$acl\"\,\n");
+print(PHP "     \)\;\n");
+print(PHP "    \$cookie_domain = \"http://e271.net\"\;\n");
+print(PHP "    \$redirect_site = \"@REDIRECT_SITE\"\;\n");
+print(PHP '?>');
+print(PHP "\n");
+
+close(PHP);
