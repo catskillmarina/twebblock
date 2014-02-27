@@ -71,8 +71,8 @@ function twebblock ()
     foreach ($badrefarray as &$badref)
     {
         # echo "<br>";
-        echo $badref;
-        echo "\n";
+        # echo $badref;
+        # echo "\n";
         if (preg_match($badref, $referrer))
         {
             echo "<br>Match";
