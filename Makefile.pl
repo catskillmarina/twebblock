@@ -1,11 +1,25 @@
 #!/usr/bin/perl
 
+#----------------------------------------------------------------#
+#         Customize these variables to your installation         #
+#----------------------------------------------------------------#
+$REDIRECT_SITE = "https://en.wikipedia.org/wiki/Transphobia";
+$acl = "file:///home/marina/public_html/twebblock/ACL";
+$cookie_domain = "http://e271.net";
+
+
+#----------------------------------------------------------------#
+#    DON'T EDIT BELOW HERE UNLESS YOU KNOW WHAT YOU ARE DOING    #
+#----------------------------------------------------------------#
+
 # CHANGE this code to use curl to get ACL data #
 
 open(ACL,"<ACL");
 @BR= <ACL>;
 close(ACL);
+
 chomp(@BR);
+
 foreach (@BR)
 {
    $_ =~ s/^http:\/\///i;
@@ -23,11 +37,6 @@ foreach (@BR)
 }
     
     
-
-open(REDIRECT_SITE,"<REDIRECT-SITE");
-@REDIRECT_SITE = <REDIRECT_SITE>;
-close(REDIRECT_SITE);
-chomp(@REDIRECT_SITE);
 
 ############################################################################
 #                       Create the Javascript blocker                      #
@@ -73,7 +82,7 @@ for (i = 0; i < badRefs.length; ++i)
 EOF
 
 print(JS "        window.location.href = \"");
-print(JS @REDIRECT_SITE);
+print(JS $REDIRECT_SITE);
 print(JS "\"\;\n");
 print(JS '}');
 print(JS "\n");
@@ -98,9 +107,6 @@ open(PHPBAK,">php/config.php.BAK");
 print(PHPBAK @JS);
 close(PHPBAK);
 
-$acl = "file:///home/marina/public_html/twebblock/ACL";
-$cookie_domain = "http://e271.net";
-
 open(PHP,">php/config.php");
 
 print PHP << 'EOF';
@@ -109,8 +115,8 @@ print PHP << 'EOF';
 EOF
 print(PHP "        \"$acl\"\,\n");
 print(PHP "     \)\;\n");
-print(PHP "    \$cookie_domain = \"http://e271.net\"\;\n");
-print(PHP "    \$redirect_site = \"@REDIRECT_SITE\"\;\n");
+print(PHP "    \$cookie_domain = \"$cookie_domain\"\;\n");
+print(PHP "    \$redirect_site = \"$REDIRECT_SITE\"\;\n");
 print(PHP '?>');
 print(PHP "\n");
 
