@@ -25,6 +25,7 @@ foreach (@BR)
    $_ =~ s/^http:\/\///i;
    $_ =~ s/^https:\/\///i;
    $_ =~ s/\//\\\//g;
+   $_ =~ s/^www\.//i;
    if (/^$/)
    {
        next;
@@ -65,10 +66,19 @@ for ($i=0; $i<=($len -2); $i++)
     print(JS '/i');
     print(JS ',');
     print(JS "\n");
+
+
+    print(JS '/[http|https]:\/\/www.');
+    print(JS $BADREFS[$i]);
+    print(JS '/i');
+    print(JS ',');
+    print(JS "\n");
 }
 print(JS '/[http|https]:\/\/');
 print(JS "$BADREFS[$len-1]/i\n");
 
+print(JS '/[http|https]:\/\/www.');
+print(JS "$BADREFS[$len-1]/i\n");
 print JS << 'EOF';
 );
 

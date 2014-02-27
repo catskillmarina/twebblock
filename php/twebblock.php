@@ -27,15 +27,17 @@ function twebblock ()
         $patterns[1] = '/^$/';
         $patterns[2] = '/http:\/\//i';
         $patterns[3] = '/https:\/\//i';
-        $patterns[4] = '/\//';
-        $patterns[5] = '/\./';
+        $patterns[4] = '/www\./i';
+        $patterns[5] = '/\//';
+        $patterns[6] = '/\./';
         $replacements = array();
         $replacements[0] = '';
         $replacements[1] = '';
         $replacements[2] = '';
         $replacements[3] = '';
-        $replacements[4] = '\/';
-        $replacements[5] = '\.';
+        $replacements[4] = '';
+        $replacements[5] = '\/';
+        $replacements[6] = '\.';
         $curlclean = preg_replace($patterns, $replacements, $curloutput);
     
     
@@ -45,7 +47,10 @@ function twebblock ()
             # think about FTP urls
             if(!preg_match("/#/", $ref)&&!preg_match("/^$/", $ref))
             {
+                $a = "www.";
+                $b = $a . $ref;
                 array_push ($temparray, $ref);
+                array_push ($temparray, $b);
             }
         }
     
@@ -66,7 +71,8 @@ function twebblock ()
     foreach ($badrefarray as &$badref)
     {
         # echo "<br>";
-        # echo $badref;
+        echo $badref;
+        echo "\n";
         if (preg_match($badref, $referrer))
         {
             echo "<br>Match";
