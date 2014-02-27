@@ -1,12 +1,10 @@
 <?php
 function twebblock ()
 {
+    include "config.php";
+
     $referrer = $_SERVER['HTTP_REFERER'];
     # echo "<h1>referrer: ", $referrer, "</h1><hr>\n";
-    
-    $acl_urls = array(
-        "file:///home/marina/public_html/twebblock/ACL",
-     );
     
     $badreferrers = array();
     
@@ -72,7 +70,7 @@ function twebblock ()
         if (preg_match($badref, $referrer))
         {
             echo "<br>Match";
-            header("Location: http://wikipedia.org");
+            header("Location: $redirect_site");
             die();
         }
     }
