@@ -7,6 +7,9 @@ $REDIRECT_SITE = "https://en.wikipedia.org/wiki/Transphobia";
 $acl = "file:///home/marina/public_html/twebblock/ACL";
 $cookie_domain = "http://e271.net";
 
+# $htaccess_behavior = "REDIRECT"|"FORBID"|"404"
+$htaccess_behavior = "REDIRECT";
+
 
 #----------------------------------------------------------------#
 #    DON'T EDIT BELOW HERE UNLESS YOU KNOW WHAT YOU ARE DOING    #
