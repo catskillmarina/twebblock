@@ -1,0 +1,15 @@
+
+#######################################################################
+# Add the contents of this file 'DOT.htaccess' to your .htaccess file #
+# in the appropriate location or to your apache config                #     
+#######################################################################
+
+RewriteEngine On
+RewriteCond %{HTTP_REFERER} .*e271.net\/~marina\/STAR\/twebblock\/javascript\/.*$ [OR,NC]
+RewriteCond %{HTTP_REFERER} .*stratus.e271.net\/~marina\/twebblock\/php\/bad.html.*$ [OR,NC]
+RewriteCond %{HTTP_REFERER} .*4chan.org\/.*$ [OR,NC]
+RewriteCond %{HTTP_REFERER} .*reddit.com\/.*$ [OR,NC]
+RewriteCond %{HTTP_REFERER} .*facebook.com\/EncyclopaediaDramatica.*$ [OR,NC]
+RewriteCond %{HTTP_REFERER} .*trolling-asshole.com.*$
+RewriteRule ^(.*)$ http://google.com/
+

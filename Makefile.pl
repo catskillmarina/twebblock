@@ -3,7 +3,7 @@
 #----------------------------------------------------------------#
 #         Customize these variables to your installation         #
 #----------------------------------------------------------------#
-$REDIRECT_SITE = "https://en.wikipedia.org/wiki/Transphobia";
+$REDIRECT_SITE = "http://google.com";
 $acl = "file:///home/marina/public_html/twebblock/ACL";
 $cookie_domain = "http://e271.net";
 
@@ -105,7 +105,6 @@ close(JS);
 
 
 
-
 ############################################################################
 #                       Create the PHP blocker config                      #
 ############################################################################
@@ -117,7 +116,7 @@ open(PHP,"<php/config.php");
 @PHP = <PHP>;
 close(PHP);
 open(PHPBAK,">php/config.php.BAK");
-print(PHPBAK @JS);
+print(PHPBAK @PHP);
 close(PHPBAK);
 
 open(PHP,">php/config.php");
@@ -134,3 +133,85 @@ print(PHP '?>');
 print(PHP "\n");
 
 close(PHP);
+
+
+############################################################################
+#                 Create the Apache htaccess blocker config                #
+############################################################################
+
+#-------------------------------------------------------#
+#                 Backup Old htaccess                   #
+#-------------------------------------------------------#
+open(HTACCESS,"<htaccess/DOT.htaccess");
+@HTACCESS = <HTACCESS>;
+close(HTACCESS);
+open(HTACCESSBAK,">htaccess/DOT.htaccess.BAK");
+print(HTACCESSBAK @HTACCESS);
+close(HTACCESSBAK);
+
+open(HTACCESS,">htaccess/DOT.htaccess");
+
+print HTACCESS << 'EOF';
+
+#######################################################################
+# Add the contents of this file 'DOT.htaccess' to your .htaccess file #
+# in the appropriate location or to your apache config                #     
+#######################################################################
+
+EOF
+
+print(HTACCESS "RewriteEngine On\n"); 
+
+for($i=0;$i<=($len-2);$i++)
+{
+    print(HTACCESS "RewriteCond \%\{HTTP_REFERER\} \.\*$BADREFS[$i]\.\*\$ \[OR,NC\]\n");
+}
+print(HTACCESS "RewriteCond \%\{HTTP_REFERER\} \.\*$BADREFS[$i]\.\*\$\n");
+print(HTACCESS "RewriteRule \^\(.\*\)\$ $REDIRECT_SITE\/\n\n");
+close(HTACCESS);
+
+
+############################################################################
+#                    Create the lighthttpd blocker config                  #
+############################################################################
+
+#-------------------------------------------------------#
+#               Backup Old lighthttpd config            #
+#-------------------------------------------------------#
+open(LIGHTHTTPD,"<lighthttpd/lighthttpd.conf");
+@LIGHTHTTPD = <LIGHTHTTPD>;
+close(LIGHTHTTPD);
+
+open(LIGHTHTTPDBAK,">lighthttpd/lighthttpd.conf.BAK");
+print(LIGHTHTTPDBAK @LIGHTHTTPD);
+close(LIGHTHTTPDBAK);
+
+#print << 'EOF';
+#
+#$HTTP["referrer"] =~ "^ayyas\.com$" { url.redirect = ( "^/(.*)" => "http://www.ayyas.com/$1" ) }
+#
+#EOF
+
+open(LIGHTHTTPD,">lighthttpd/lighthttpd.conf");
+
+for $hostname ("","www.")
+{
+    for $protocol ("http:\/\/","https:\/\/")
+    {
+        print (LIGHTHTTPD "\$HTTP\[\"referrer\"\] =~");
+
+        print(LIGHTHTTPD " \"\(");
+        for($i=0;$i<=($len-2);$i++)
+        {
+            print(LIGHTHTTPD "$protocol$hostname$BADREFS[$i]\*\$\|");
+        }
+        print(LIGHTHTTPD "$protocol$hostname$BADREFS[$1]*\$");
+        print(LIGHTHTTPD "\)\"\n");
+
+        print(LIGHTHTTPD "\{\n");
+        print(LIGHTHTTPD "    url.redirect = \( ");
+        print(LIGHTHTTPD "\"^/(.*)\" => \"");
+        print(LIGHTHTTPD "$REDIRECT_SITE\" \) \n\}\n\n");
+    }
+}
+close(LIGHTHTTPD);
